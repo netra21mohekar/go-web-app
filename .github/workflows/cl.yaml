@@ -36,6 +36,7 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.56.2
+          args: ./...
 
   push:
     runs-on: ubuntu-latest
@@ -72,12 +73,18 @@ jobs:
 
       - name: Update image tag in deployment.yaml
         run: |
-          sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/go-web-app:${{ github.run_id }}|" k8s/manifests/deployment.yaml
+          DEPLOYMENT_FILE="k8s/manifests/deployment.yaml"
+          if [ -f "$DEPLOYMENT_FILE" ]; then
+            sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/go-web-app:${{ github.run_id }}|" "$DEPLOYMENT_FILE"
+          else
+            echo "$DEPLOYMENT_FILE not found!"
+            exit 1
+          fi
 
       - name: Commit and push changes
         run: |
           git config --global user.email "mohekarn@gmail.com"
           git config --global user.name "netra21mohekar"
           git add k8s/manifests/deployment.yaml
-          git commit -m "Update image tag in deployment.yaml" || echo "No changes to commit"
+          git diff --cached --quiet || git commit -m "Update image tag in deployment.yaml"
           git push
