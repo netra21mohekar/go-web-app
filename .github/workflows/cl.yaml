@@ -32,10 +32,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Go 1.21 (for golangci-lint compatibility)
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.56.2
+          version: v1.58.0  # latest version compatible with Go 1.22
           args: ./...
 
   push:
