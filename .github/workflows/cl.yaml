@@ -78,6 +78,6 @@ jobs:
         run: |
           git config --global user.email "mohekarn@gmail.com"
           git config --global user.name "netra21mohekar"
-          git add k8s/deployment.yaml
+          git add k8s/manifests/deployment.yaml
           git commit -m "Update image tag in deployment.yaml" || echo "No changes to commit"
           git push
