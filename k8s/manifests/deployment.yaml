@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: go-web-app
-        image: netranetra/go-web-app:18073278117
+        image: netranetra/go-web-app:18073288058
         ports:
         - containerPort: 8080
 
